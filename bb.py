@@ -85,14 +85,14 @@ def signup_process(email):
     # Klik tombol Bitbucket untuk mengimpor proyek
     bitbucket_button = driver.find_element(By.XPATH, "//button[contains(@class, 'btn-tertiary') and contains(@class, 'tw-px-4')]")
     bitbucket_button.click()
-    time.sleep(5)
+    time.sleep(7)
 
     # Masukkan site name dengan format random
-    site_name_input = driver.find_element(By.NAME, "siteName")  # Menggunakan atribut name yang lebih generik
-    site_name = generate_random_site_name()
-    site_name_input.send_keys(site_name)
-    site_name_input.send_keys(Keys.ENTER)
-    time.sleep(7)
+    driver.find_element(By.NAME, "siteName").click()
+    site_name = generate_random_site_name()  # Generate random site name
+    driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
+    driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
+    time.sleep(5)
 
     # Lanjutkan ke langkah deploy dan copy title
     driver.find_element(By.CSS_SELECTOR, "#deploys-secondary-nav-item .tw-transition").click()
