@@ -83,9 +83,13 @@ def signup_process(email):
     time.sleep(3)
 
     # Klik tombol Bitbucket untuk mengimpor proyek
-    bitbucket_button = driver.find_element(By.XPATH, "//button[contains(@class, 'btn-tertiary') and contains(@class, 'tw-px-4')]")
-    bitbucket_button.click()
+    driver.find_element(By.XPATH, "//button[text()='Bitbucket']").click()
     time.sleep(7)
+    
+    # Find the element with the matching href link and click it
+    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
+    actions.move_to_element(element).perform()
+    time.sleep(2)
 
     # Masukkan site name dengan format random
     driver.find_element(By.NAME, "siteName").click()
