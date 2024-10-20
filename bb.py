@@ -1,9 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 import random
 import string
+import pyperclip
 
 # Konfigurasi driver
 driver = webdriver.Chrome()  # Menggunakan ChromeDriver yang ada di sistem
@@ -45,13 +48,6 @@ def signup_process(email):
     grant_access_button.click()
     time.sleep(5)
 
-    # Input nama situs menggunakan elemen berdasarkan atribut `name="siteName"`
-    driver.find_element(By.NAME, "siteName").click()
-    site_name = generate_random_site_name()  # Menghasilkan nama situs acak
-    driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Memasukkan nama situs acak yang dihasilkan
-    driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
-    time.sleep(5)
-
     # Buka link Netlify team sites
     modified_email = email.split('+')[1].split('@')[0]
     driver.get(f"https://app.netlify.com/teams/{modified_email}/sites")
@@ -66,17 +62,60 @@ def signup_process(email):
     logout_button.click()
     time.sleep(5)
 
-    # Lanjutkan dengan proses login ke Bitbucket
-    username_input = driver.find_element(By.ID, "username")
-    username_input.send_keys("geivux1+fatiscent@outlook.com")
-    username_input.send_keys(Keys.ENTER)
+    # Login kembali dengan email dan password baru
+    email_input = driver.find_element(By.ID, "username")
+    email_input.send_keys("geivux1+fatiscent@outlook.com")
+    email_input.send_keys(Keys.ENTER)
     time.sleep(3)
 
-    # Isi password untuk Bitbucket
     password_input = driver.find_element(By.ID, "password")
     password_input.send_keys("AyLevy123@")
     password_input.send_keys(Keys.ENTER)
     time.sleep(5)
+    
+    # Kembali ke halaman tim Netlify
+    driver.get(f"https://app.netlify.com/teams/{modified_email}/sites")
+    time.sleep(5)
+
+    # Klik "Import from Git"
+    import_git_button = driver.find_element(By.XPATH, "//a[contains(text(), 'Import from Git')]")
+    import_git_button.click()
+    time.sleep(3)
+
+    # Klik tombol Bitbucket untuk mengimpor proyek
+    bitbucket_button = driver.find_element(By.XPATH, "//button[contains(@class, 'btn-tertiary') and contains(@class, 'tw-px-4')]")
+    bitbucket_button.click()
+    time.sleep(5)
+
+    # Masukkan site name dengan format random
+    site_name_input = driver.find_element(By.NAME, "siteName")  # Menggunakan atribut name yang lebih generik
+    site_name = generate_random_site_name()
+    site_name_input.send_keys(site_name)
+    site_name_input.send_keys(Keys.ENTER)
+    time.sleep(7)
+
+    # Lanjutkan ke langkah deploy dan copy title
+    driver.find_element(By.CSS_SELECTOR, "#deploys-secondary-nav-item .tw-transition").click()
+    time.sleep(5)
+
+    driver.find_element(By.CSS_SELECTOR, ".btn-secondary:nth-child(1) > .tw-flex").click()
+    time.sleep(5)
+
+    driver.find_element(By.CSS_SELECTOR, ".card:nth-child(8) .btn").click()
+    time.sleep(5)
+
+    # Masukkan title dan copy
+    title_input = driver.find_element(By.NAME, "title")
+    title_input.send_keys("asc")
+    title_input.send_keys(Keys.ENTER)
+    time.sleep(5)
+
+    # Klik tombol copy dan ambil teks yang disalin
+    driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
+    time.sleep(1)
+
+    copied_text = pyperclip.paste()
+    print(f"Copied text: {copied_text}")
 
 # Membaca file bb.txt
 with open('bb.txt', 'r') as file:
