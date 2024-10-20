@@ -14,7 +14,7 @@ import pyperclip
 driver = webdriver.Chrome()  # Menggunakan ChromeDriver yang ada di sistem
 
 # Fungsi untuk menghasilkan nama acak
-def generate_random_site_name(length=8):
+def generate_random_site_name(length=15):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
 # Fungsi untuk signup dan login Bitbucket
@@ -22,6 +22,9 @@ def signup_process(email):
     # Buka halaman signup Netlify
     driver.get("https://app.netlify.com/signup")
     time.sleep(5)
+    
+    driver.set_window_size(1200, 1000)
+    time.sleep(3)
 
     # Klik tombol "Sign up with Bitbucket"
     bitbucket_button = driver.find_element(By.XPATH, "//button[@name='bitbucket']")
@@ -87,10 +90,13 @@ def signup_process(email):
     # Klik tombol Bitbucket untuk mengimpor proyek
     driver.find_element(By.XPATH, "//button[text()='Bitbucket']").click()
     time.sleep(7)
-    
+
+    # Inisialisasi ActionChains
+    actions = ActionChains(driver)
+
     # Find the element with the matching href link and click it
     element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
-    actions.move_to_element(element).perform()
+    actions.move_to_element(element).click().perform()  # Klik elemen setelah digulir
     time.sleep(2)
 
     # Masukkan site name dengan format random
@@ -98,30 +104,28 @@ def signup_process(email):
     site_name = generate_random_site_name()  # Generate random site name
     driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
     driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
-    time.sleep(5)
+    time.sleep(15)
 
-    # Lanjutkan ke langkah deploy dan copy title
     driver.find_element(By.CSS_SELECTOR, "#deploys-secondary-nav-item .tw-transition").click()
     time.sleep(5)
-
+    
     driver.find_element(By.CSS_SELECTOR, ".btn-secondary:nth-child(1) > .tw-flex").click()
     time.sleep(5)
-
+    
     driver.find_element(By.CSS_SELECTOR, ".card:nth-child(8) .btn").click()
     time.sleep(5)
-
-    # Masukkan title dan copy
-    title_input = driver.find_element(By.NAME, "title")
-    title_input.send_keys("asc")
-    title_input.send_keys(Keys.ENTER)
+    
+    driver.find_element(By.NAME, "title").send_keys("asc")  # Use the name attribute for the title input
+    driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)  # Submit the input
     time.sleep(5)
-
-    # Klik tombol copy dan ambil teks yang disalin
+    
+    # Click the copy button
     driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
-    time.sleep(1)
-
-    copied_text = pyperclip.paste()
-    print(f"Copied text: {copied_text}")
+    time.sleep(1)  # Short wait for clipboard to update
+    
+    # Get the copied text and write it to the console and the file
+    copied_text = pyperclip.paste()  # Get the copied text from clipboard
+    print(f"{copied_text}")  # Print the copied text to the console
 
 # Membaca file bb.txt
 with open('bb.txt', 'r') as file:
