@@ -18,11 +18,11 @@ def get_emails():
         emails = file.readlines()
     return [email.strip() for email in emails]
 
-# Fungsi untuk menghasilkan 4 digit huruf random dan 4 digit angka random
+# Fungsi untuk menghasilkan 5 digit huruf random dan 5 digit angka random
 def random_site_name():
-    letters = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=4))
-    numbers = ''.join(random.choices('0123456789', k=4))
-    letters2 = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=4))
+    letters = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
+    numbers = ''.join(random.choices('0123456789', k=5))
+    letters2 = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
     return f"{letters}-{numbers}-{letters2}"
 
 # Main function to handle the automation
@@ -60,31 +60,27 @@ def signup_process(email):
     grant_access_button.click()
     time.sleep(5)
 
-    # Buka link https://app.netlify.com/teams/{modified_email}/sites
+    # Buka link Netlify team sites
     modified_email = email.split('+')[1].split('@')[0]
     driver.get(f"https://app.netlify.com/teams/{modified_email}/sites")
     time.sleep(5)
 
-    # Buka link https://bitbucket.org/account/workspaces
-    driver.get("https://bitbucket.org/account/workspaces")
+    # Membuka halaman logout Atlassian/Bitbucket
+    driver.get("https://id.atlassian.com/logout?continue=https%3A%2F%2Fbitbucket.org%2Faccount%2Fsignout%2F&prompt=none")
     time.sleep(5)
 
-    # Klik icon avatar
-    avatar_button = driver.find_element(By.XPATH, "//span[@class='css-bwxjrz']")
-    avatar_button.click()
-    time.sleep(3)
-
-    # Klik tombol "Log out"
-    logout_button = driver.find_element(By.XPATH, "//span[@class='css-uokyes' and @data-item-title='true' and text()='Log out']")
+    # Klik tombol Log out di halaman Atlassian
+    logout_button = driver.find_element(By.XPATH, "//span[text()='Log out']")
     logout_button.click()
-    time.sleep(7)
+    time.sleep(5)
 
-    # Login kembali dengan email dan password baru
-    email_input = driver.find_element(By.ID, "username")
-    email_input.send_keys("geivux1+fatiscent@outlook.com")
-    email_input.send_keys(Keys.ENTER)
+    # Lanjutkan dengan proses login ke Bitbucket
+    username_input = driver.find_element(By.ID, "username")
+    username_input.send_keys("geivux1+fatiscent@outlook.com")
+    username_input.send_keys(Keys.ENTER)
     time.sleep(3)
 
+    # Isi password untuk Bitbucket
     password_input = driver.find_element(By.ID, "password")
     password_input.send_keys("AyLevy123@")
     password_input.send_keys(Keys.ENTER)
