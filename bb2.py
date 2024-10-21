@@ -16,14 +16,7 @@ def generate_random_site_name(length=15):
 # Fungsi untuk signup dan login Bitbucket
 def signup_process(email):
     # Konfigurasi driver di dalam fungsi
-    from selenium.webdriver.chrome.options import Options
-
-    options = Options()
-    options.add_argument("--headless")  # Mode headless
-    options.add_argument("--no-sandbox")  # Tambahan untuk GitHub Actions
-    options.add_argument("--disable-dev-shm-usage")  # Tambahan untuk GitHub Actions
-    
-    driver = webdriver.Chrome(options=options)  # Menggunakan ChromeDriver yang ada di sistem
+    driver = webdriver.Chrome()  # Menggunakan ChromeDriver yang ada di sistem
     
     # Buka halaman signup Netlify
     driver.get("https://app.netlify.com/signup")
@@ -33,39 +26,29 @@ def signup_process(email):
     time.sleep(3)
 
     # Klik tombol "Sign up with Bitbucket"
-    bitbucket_button = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@name='bitbucket']"))
-    )
+    bitbucket_button = driver.find_element(By.XPATH, "//button[@name='bitbucket']")
     bitbucket_button.click()
     time.sleep(15)
 
     # Input email yang diambil dari file
-    email_input = WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.ID, "username"))
-    )
+    email_input = driver.find_element(By.ID, "username")
     email_input.send_keys(email)
     email_input.send_keys(Keys.ENTER)
     time.sleep(5)
 
     # Isi password
-    password_input = WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.ID, "password"))
-    )
+    password_input = driver.find_element(By.ID, "password")
     password_input.send_keys("giatuye123")
     password_input.send_keys(Keys.ENTER)
     time.sleep(5)
 
     # Klik tombol "Continue without two-step verification"
-    continue_without_2fa = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//span[text()='Continue without two-step verification']"))
-    )
+    continue_without_2fa = driver.find_element(By.XPATH, "//span[text()='Continue without two-step verification']")
     continue_without_2fa.click()
     time.sleep(7)
 
     # Klik tombol "Grant access"
-    grant_access_button = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@name='action' and @value='approve']"))
-    )
+    grant_access_button = driver.find_element(By.XPATH, "//button[@name='action' and @value='approve']")
     grant_access_button.click()
     time.sleep(5)
 
@@ -80,37 +63,30 @@ def signup_process(email):
     time.sleep(5)
 
     # Klik tombol "Log in with Bitbucket"
-    bitbucket_button_login = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@name='bitbucket']"))
-    )
+    bitbucket_button_login = driver.find_element(By.XPATH, "//button[@name='bitbucket']")
     bitbucket_button_login.click()
     time.sleep(10)
     
     # Simpan URL yang terbuka setelah login Bitbucket (untuk digunakan nanti)
     current_url = driver.current_url
+    # Hapus print(f"Current URL: {current_url}") jika tidak ingin mencetak URL
 
     # Kembali ke halaman logout Atlassian/Bitbucket
     driver.get("https://id.atlassian.com/logout?continue=https%3A%2F%2Fbitbucket.org%2Faccount%2Fsignout%2F&prompt=none")
     time.sleep(5)
 
     # Klik tombol Log out di halaman Atlassian
-    logout_button = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//span[text()='Log out']"))
-    )
+    logout_button = driver.find_element(By.XPATH, "//span[text()='Log out']")
     logout_button.click()
     time.sleep(5)
 
     # Login kembali dengan email dan password baru
-    email_input = WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.ID, "username"))
-    )
+    email_input = driver.find_element(By.ID, "username")
     email_input.send_keys("geivux1+fatiscent@outlook.com")
     email_input.send_keys(Keys.ENTER)
     time.sleep(3)
 
-    password_input = WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.ID, "password"))
-    )
+    password_input = driver.find_element(By.ID, "password")
     password_input.send_keys("AyLevy123@")
     password_input.send_keys(Keys.ENTER)
     time.sleep(5)
@@ -120,33 +96,27 @@ def signup_process(email):
     time.sleep(5)
 
     # Klik "Import from Git"
-    import_git_button = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Import from Git')]"))
-    )
+    import_git_button = driver.find_element(By.XPATH, "//a[contains(text(), 'Import from Git')]")
     import_git_button.click()
     time.sleep(3)
 
     # Klik tombol Bitbucket untuk mengimpor proyek
     driver.find_element(By.XPATH, "//button[text()='Bitbucket']").click()
-    time.sleep(10)
+    time.sleep(7)
 
     # Inisialisasi ActionChains
     actions = ActionChains(driver)
 
     # Find the element with the matching href link and click it
-    element = WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]"))
-    )
+    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
     actions.move_to_element(element).click().perform()  # Klik elemen setelah digulir
     time.sleep(2)
 
     # Masukkan site name dengan format random
+    driver.find_element(By.NAME, "siteName").click()
     site_name = generate_random_site_name()  # Generate random site name
-    site_name_input = WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.NAME, "siteName"))
-    )
-    site_name_input.send_keys(site_name)  # Use the generated random site name
-    site_name_input.send_keys(Keys.ENTER)
+    driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
+    driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
     time.sleep(15)
 
     driver.find_element(By.CSS_SELECTOR, "#deploys-secondary-nav-item .tw-transition").click()
