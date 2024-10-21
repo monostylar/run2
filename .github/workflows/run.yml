@@ -25,4 +25,4 @@ jobs:
 
       - name: RUN BOT
         run: |
-          python run2.py
+          python bb.py
