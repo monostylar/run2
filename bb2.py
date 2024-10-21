@@ -28,7 +28,7 @@ def signup_process(email):
     # Klik tombol "Sign up with Bitbucket"
     bitbucket_button = driver.find_element(By.XPATH, "//button[@name='bitbucket']")
     bitbucket_button.click()
-    time.sleep(15)
+    time.sleep(30)
 
     # Input email yang diambil dari file
     email_input = driver.find_element(By.ID, "username")
