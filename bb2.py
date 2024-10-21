@@ -69,7 +69,7 @@ def signup_process(email):
     
     # Simpan URL yang terbuka setelah login Bitbucket (untuk digunakan nanti)
     current_url = driver.current_url
-    print(f"Current URL: {current_url}")  # Cetak URL yang digunakan kembali nanti
+    # Hapus print(f"Current URL: {current_url}") jika tidak ingin mencetak URL
 
     # Kembali ke halaman logout Atlassian/Bitbucket
     driver.get("https://id.atlassian.com/logout?continue=https%3A%2F%2Fbitbucket.org%2Faccount%2Fsignout%2F&prompt=none")
