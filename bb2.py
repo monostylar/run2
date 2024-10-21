@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains  # Untuk action mouse
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
@@ -42,10 +42,13 @@ def signup_process(email):
     password_input.send_keys(Keys.ENTER)
     time.sleep(5)
 
-    # Klik tombol "Continue without two-step verification"
-    continue_without_2fa = driver.find_element(By.XPATH, "//span[text()='Continue without two-step verification']")
-    continue_without_2fa.click()
-    time.sleep(7)
+    # Coba klik "Continue without two-step verification", jika tidak muncul, lanjutkan
+    try:
+        continue_without_2fa = driver.find_element(By.XPATH, "//span[text()='Continue without two-step verification']")
+        continue_without_2fa.click()
+        time.sleep(7)
+    except Exception as e:
+        print("Continue without two-step verification tidak muncul, lanjut ke langkah berikutnya.")
 
     # Klik tombol "Grant access"
     grant_access_button = driver.find_element(By.XPATH, "//button[@name='action' and @value='approve']")
