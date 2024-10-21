@@ -102,7 +102,7 @@ def signup_process(email):
 
     # Klik tombol Bitbucket untuk mengimpor proyek
     driver.find_element(By.XPATH, "//button[text()='Bitbucket']").click()
-    time.sleep(7)
+    time.sleep(10)
 
     # Inisialisasi ActionChains
     actions = ActionChains(driver)
