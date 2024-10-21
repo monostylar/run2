@@ -34,7 +34,7 @@ def signup_process(email):
     email_input = driver.find_element(By.ID, "username")
     email_input.send_keys(email)
     email_input.send_keys(Keys.ENTER)
-    time.sleep(5)
+    time.sleep(15)
 
     # Isi password
     password_input = driver.find_element(By.ID, "password")
