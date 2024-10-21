@@ -108,7 +108,7 @@ def signup_process(email):
     actions = ActionChains(driver)
 
     # Find the element with the matching href link and click it
-    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
+    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'titied')]")
     actions.move_to_element(element).click().perform()  # Klik elemen setelah digulir
     time.sleep(2)
 
