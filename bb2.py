@@ -9,16 +9,15 @@ import random
 import string
 import pyperclip
 
-
-# Konfigurasi driver
-driver = webdriver.Chrome()  # Menggunakan ChromeDriver yang ada di sistem
-
 # Fungsi untuk menghasilkan nama acak
 def generate_random_site_name(length=15):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
 # Fungsi untuk signup dan login Bitbucket
 def signup_process(email):
+    # Konfigurasi driver di dalam fungsi
+    driver = webdriver.Chrome()  # Menggunakan ChromeDriver yang ada di sistem
+    
     # Buka halaman signup Netlify
     driver.get("https://app.netlify.com/signup")
     time.sleep(5)
@@ -141,6 +140,12 @@ def signup_process(email):
     copied_text = pyperclip.paste()  # Get the copied text from clipboard
     print(f"{copied_text}")  # Print the copied text to the console
 
+    # Tutup browser setelah selesai
+    driver.quit()
+    
+    # Tunggu sebentar sebelum mengulangi proses jika masih ada email
+    time.sleep(5)
+
 # Membaca file bb.txt
 with open('bb.txt', 'r') as file:
     emails = file.readlines()
@@ -148,7 +153,4 @@ with open('bb.txt', 'r') as file:
 # Loop melalui setiap email
 for email in emails:
     email = email.strip()  # Menghapus spasi atau newline di awal/akhir email
-    signup_process(email)
-
-# Tutup browser setelah selesai
-driver.quit()
+    signup_process(email)  # Setiap iterasi akan menutup dan membuka kembali browser
